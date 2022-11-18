@@ -14,7 +14,10 @@ function Login() {
     };
     try {
       toast.loading("Loading...");
-      const response = await axios.post("/api/auth/login", userObj);
+      const response = await axios.post(
+        "https://reset-passsword.herokuapp.com/api/auth/login",
+        userObj
+      );
       toast.dismiss();
       if (response.data.success) {
         toast.success(response.data.message);
@@ -32,9 +35,12 @@ function Login() {
   const sendResetPasswordLink = async () => {
     try {
       toast.loading("");
-      const response = await axios.post("/api/auth/send-password-reset-link", {
-        email,
-      });
+      const response = await axios.post(
+        "https://reset-passsword.herokuapp.com/api/auth/send-password-reset-link",
+        {
+          email,
+        }
+      );
       toast.dismiss();
       if (response.data.success) {
         toast.success(response.data.message);
@@ -53,7 +59,7 @@ function Login() {
       {!showForgotPassword && (
         <div className="w-[400px] flex space-y-5 flex-col shadow-lg border border-gray-300">
           <h1 className="font-semibold text-2xl text-white bg-primary p-5 rounded-b-full text-center">
-            Good to see you again
+            Welcome Back !!
           </h1>
 
           <div className="flex flex-col space-y-5 p-5">

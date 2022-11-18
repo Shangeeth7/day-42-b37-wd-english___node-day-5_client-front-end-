@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 function Register() {
   const [name, setName] = useState("");
@@ -8,29 +8,38 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
   const registerUser = async () => {
-    if (password === confirmPassword) {
-      const userObj = {
-        name,
-        password,
-        email,
-        confirmPassword,
-      };
-      try {
-        toast.loading("Loading...");
-        const response = await axios.post("/api/auth/register", userObj);
-        toast.dismiss();
-        if (response.data.success) {
-          toast.success(response.data.message);
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.dismiss();
-        toast.error("Something went wrong");
-      }
+    if (name.length < 2) {
+      toast.error("name must be minium 2 characters");
     } else {
-      toast.error("Passwords Not Matched");
+      if (password === confirmPassword && confirmPassword.length > 5) {
+        const userObj = {
+          name,
+          password,
+          email,
+          confirmPassword,
+        };
+        try {
+          toast.loading("Loading...");
+          const response = await axios.post(
+            "https://reset-passsword.herokuapp.com/api/auth/register",
+            userObj
+          );
+          toast.dismiss();
+          if (response.data.success) {
+            toast.success(response.data.message);
+            navigate("/login");
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.dismiss();
+          toast.error("Something went wrong");
+        }
+      } else {
+        toast.error("minimum 6 characters / Passwords Not Matched");
+      }
     }
   };
 
@@ -38,7 +47,7 @@ function Register() {
     <div className="flex justify-center items-center h-screen space-x-40">
       <div className="w-[400px] flex space-y-5 flex-col shadow-lg border border-gray-300">
         <h1 className="font-semibold text-2xl text-white bg-primary p-5 rounded-b-full text-center">
-          Welcome TO SHEY
+          Nice To meet you
         </h1>
 
         <div className="flex flex-col space-y-5 p-5">
